@@ -149,6 +149,16 @@ python manage.py runserver
 - Repositorio en GitHub
 - Cuenta en [render.com](https://render.com)
 
+### Archivos de configuración incluidos
+
+El repositorio incluye los archivos que Render necesita para detectar el entorno:
+
+| Archivo | Contenido |
+|---------|-----------|
+| `.python-version` | `3.14` (Render usa la última versión 3.14.x disponible) |
+| `Procfile` | `web: gunicorn ecommerce.wsgi:application` |
+| `requirements.txt` | Django, gunicorn, whitenoise, Pillow, python-decouple |
+
 ### Pasos
 
 1. **Crear Web Service:** New + Web Service, conectar repositorio.
@@ -170,9 +180,13 @@ python manage.py runserver
    - Size: 1 GB
 
 4. **Variables de Entorno:**
-   - `DEBUG` = `False`
-   - `SECRET_KEY` = (cadena aleatoria compleja)
-   - `ALLOWED_HOSTS` = `.onrender.com` (o la URL de tu servicio)
+
+   | Variable | Valor |
+   |----------|-------|
+   | `DEBUG` | `False` |
+   | `SECRET_KEY` | (cadena aleatoria compleja) |
+   | `ALLOWED_HOSTS` | `.onrender.com` |
+   | `CSRF_TRUSTED_ORIGINS` | `https://tu-ecommerce.onrender.com` |
 
 5. **Desplegar:** El servicio se construye automáticamente.
 
