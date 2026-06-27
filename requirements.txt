@@ -1,0 +1,5 @@
+django>=5.0,<5.1
+gunicorn
+whitenoise
+Pillow
+python-decouple

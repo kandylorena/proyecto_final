@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Carrito de Compras{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Carrito de Compras</h1>
+
+{% if cart_items %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'catalog:product_detail' item.product.id %}">{{ item.product.name }}</a>
+                        </td>
+                        <td>${{ item.price|floatformat:0 }}</td>
+                        <td>
+                            <form action="{% url 'cart:update_cart' item.product.id %}" method="post" class="row g-1" style="max-width: 140px;">
+                                {% csrf_token %}
+                                <div class="col-6">
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="{{ item.product.stock }}" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Actualizar</button>
+                                </div>
+                            </form>
+                        </td>
+                        <td>${{ item.subtotal|floatformat:0 }}</td>
+                        <td>
+                            <a href="{% url 'cart:remove_from_cart' item.product.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="table-info">
+                    <td colspan="3" class="text-end fw-bold">Total:</td>
+                    <td class="fw-bold">${{ cart_total|floatformat:0 }}</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-secondary">Seguir Comprando</a>
+        <a href="{% url 'orders:checkout' %}" class="btn btn-success btn-lg">Confirmar Compra</a>
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <p class="lead text-muted">Tu carrito está vacío.</p>
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Ir al Catálogo</a>
+    </div>
+{% endif %}
+{% endblock %}

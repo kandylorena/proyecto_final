@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Orden #{{ order.id }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Orden #{{ order.id }}</h1>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <p><strong>Fecha:</strong> {{ order.created_at|date:"d/m/Y H:i" }}</p>
+        <p><strong>Estado:</strong>
+            <span class="badge bg-{% if order.status == 'completed' %}success{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %}">
+                {{ order.get_status_display }}
+            </span>
+        </p>
+    </div>
+</div>
+
+<h3>Productos</h3>
+<table class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order.items.all %}
+            <tr>
+                <td>{{ item.product_name }}</td>
+                <td>${{ item.price_snapshot|floatformat:0 }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.price_snapshot|floatformat:0 }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr class="table-info">
+            <td colspan="3" class="text-end fw-bold">Total:</td>
+            <td class="fw-bold">${{ order.total|floatformat:0 }}</td>
+        </tr>
+    </tfoot>
+</table>
+
+<a href="{% url 'orders:order_list' %}" class="btn btn-outline-secondary">&larr; Mis Órdenes</a>
+<a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Seguir Comprando</a>
+{% endblock %}
