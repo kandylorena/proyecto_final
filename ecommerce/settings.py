@@ -7,7 +7,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-desarrollo-local-de-r
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
+CSRF_TRUSTED_ORIGINS = [f'https://{h}' if h and not h.startswith('http') else h for h in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if h]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -80,7 +80,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
 STORAGES = {
     "staticfiles": {
